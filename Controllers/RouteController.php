@@ -13,8 +13,10 @@
         for($i = 0; $i < count($pathArray); $i++){
             if($pathArray[$i] != '' && $i == (count($pathArray) - 1)){
                 if(function_exists($pathArray[$i])){
+                    $inputJSON = file_get_contents('php://input');
+                    $input = json_decode($inputJSON, TRUE);
                     $func = $pathArray[$i];
-                    $func($_POST);
+                    $func($input);
                     $success = true;
                 }
                 else{
