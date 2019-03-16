@@ -28,14 +28,10 @@
     
     if(file_exists($dataPath)){
        if(!$clear){
-           $result = json_decode(file_get_contents($dataPath), true);
-           if(is_array($result)){
-               
-           
-           $fileContents = $result;
-           //var_dump($result);
-       
-           }
+            $result = json_decode(file_get_contents($dataPath), true);
+            if(is_array($result)){
+                $fileContents = $result;
+            }    
         } 
     }
     

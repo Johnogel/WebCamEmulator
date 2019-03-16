@@ -3,20 +3,29 @@
         require_once $filename;
 //        echo $filename;
     }
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
+    function callPostFunction($func){
+        try{
+            $func(json_decode( file_get_contents( 'php://input' ), true ));
+
+        } catch (Exception $ex) {
+            header('HTTP/1.0 400 Bad error');
+            echo json_encode(
+                array(
+                    'message' => $ex->getMessage(),
+                    'code' => $ex->getCode(),
+                )
+            );
+        }
+    }
+    
     function routeArray($pathArray){
         $success = false;
         for($i = 0; $i < count($pathArray); $i++){
             if($pathArray[$i] != '' && $i == (count($pathArray) - 1)){
                 if(function_exists($pathArray[$i])){
-                    $inputJSON = file_get_contents('php://input');
-                    $input = json_decode($inputJSON, TRUE);
                     $func = $pathArray[$i];
-                    $func($input);
+                    callPostFunction($func);
                     $success = true;
                 }
                 else{
@@ -36,7 +45,7 @@
     }
     
     function routeRequest($path, $queryString){
-        
+        global $rootPath;
         $path = str_replace($rootPath, "", $path);
         //$path 
         

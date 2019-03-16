@@ -7,7 +7,7 @@
   <title>Monitor My Stuff</title>
   <meta name="description" content="Test">
   <meta name="author" content="jbelaire">
-  <script src="<?php echo $rootPath?>/Scripts/jquery-3.1.1.min.js"></script>
+  <script src="<?php resolveUrl('Scripts/jquery-3.1.1.min.js')?>"></script>
 
 </head>
 
@@ -51,23 +51,43 @@
             width:100%;
         }
     </style>
-    <script src="<?php echo $rootPath?>/Scripts/main.js"></script>
+    <script src="<?php resolveUrl('Scripts/main.js')?>"></script>
+    <script>
+        function logout(){
+            $.ajax({
+                type:'POST',
+                url: '<?php resolveUrl('Logout') ?>',
+                dataType:'json',
+                success: function(e){
+                    location.reload();
+                },
+                error: function(e){
+                    console.error(e);
+                }
+            });
+        }
+    </script>
     <div class="main">
         <div class="header">
             <div class="flexWrapper">
                 
                 <div></div>
                 <div><h3>LOGO PLACEHOLDER</h3></div>
-                <div style="padding-right"><a>log out</a></div>
+                <div style="padding-right">
+                    <?php if(authenticated()) { ?>
+                        <button onclick="logout()">Log Out</button>
+                    <?php } ?>
+                </div>
         
             </div>
         </div>
             <div class="body">
 
             <?php
+            
               require_once '.config.php';
 
-              if(isset($_SESSION['pass-hash']) && $_SESSION['pass-hash'] == $passwordHash){
+              if(authenticated()){
                   require_once 'Views/CamView.php';
               }
               else{
@@ -77,27 +97,6 @@
         </div>
     </div>
 
-  <script> 
-    $(document).ready(function(){
-        $.ajax({
-            type:'POST',
-            url: '<?php echo $rootPath?>/Login',
-            contentType: 'application/json',
-            content: {'test': 'test'},
-            success: function(e){
-                console.log(e);
-                alert(e);
-            },
-            error: function(err){
-                console.error(err);
-    
-            }
-            
-        });
-    });
 
-      
-      
-  </script>
 </body>
 </html>
