@@ -8,6 +8,8 @@
   <meta name="description" content="Test">
   <meta name="author" content="jbelaire">
   <script src="<?php resolveUrl('Scripts/jquery-3.1.1.min.js')?>"></script>
+  <script src="<?php resolveUrl('Scripts/knockout-3.5.0.js')?>"></script>
+
 
 </head>
 

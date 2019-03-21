@@ -1,6 +1,7 @@
 <?php
     $rootPath = getenv('APP_ROOT_PATH');
     require_once '.config.php';
+    require_once 'Utilities/functions.php';
     session_start();
     
     function resolveUrl($path){

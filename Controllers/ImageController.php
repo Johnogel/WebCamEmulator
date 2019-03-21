@@ -1,6 +1,4 @@
 <?php
 
-function GetImage($direction){
-    
-}
+
 ?>

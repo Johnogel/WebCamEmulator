@@ -46,6 +46,13 @@
                 $(this).click();
             }
         });
+        
+        $('input').keyup(function(e){
+            if(e.key === "Enter"){
+                $('#btnEnter').click();
+            }
+        
+        });
     });
 </script>
 <div class="login">
