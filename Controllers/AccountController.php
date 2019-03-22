@@ -2,6 +2,8 @@
 
 require_once  'Models/Person.php';
 
+
+
 function Login($postData){
     
 //    if($username == $usernameMaster && password_verify($password, $passwordHash)){
@@ -14,13 +16,14 @@ function Login($postData){
     
     $token = array();
     
-    if($person->authenticationValid()){
+    if(!hasExceededLoginMax() && $person->authenticationValid()){
         setAsAuthenticated($person->passwordHash);
         
         
         //$_COOKIE['']
     }
     else{
+        incrementLoginAttemptsForSession();
         throw new Exception('invalid credentials for '. $person->username);
     }
     

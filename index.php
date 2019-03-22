@@ -1,8 +1,10 @@
 <?php
     $rootPath = getenv('APP_ROOT_PATH');
+    $maxLoginAttempts = 5;
     require_once '.config.php';
     require_once 'Utilities/functions.php';
-    session_start();
+    
+    sessionRefresh();
     
     function resolveUrl($path){
         global $rootPath;

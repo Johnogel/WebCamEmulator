@@ -15,6 +15,13 @@
         width: 150px;
         height: 30px;
     }
+    
+    .errorSummary{
+        width: 100%;
+        text-align: center;
+        color: indianred;
+        padding-top: 20px;
+    }
 </style>
 <script>
     function login(){
@@ -29,13 +36,18 @@
            dataType:'json',
            data: JSON.stringify(postData),
            success: function(e){
-               location.reload();
            },
            error: function(e){
                console.error(e);
-           }
+           },
+            complete: function(){
+                location.reload();
+
+            }
         });
     }
+    
+    
     
     $(document).ready(function(){
         $('#btnEnter').on('keyup', function(e){
@@ -47,6 +59,8 @@
             }
         });
         
+        $('#txtUsername').focus();
+        
         $('input').keyup(function(e){
             if(e.key === "Enter"){
                 $('#btnEnter').click();
@@ -56,7 +70,11 @@
     });
 </script>
 <div class="login">
-    
+    <?php 
+        $loginAttemps = getLoginAttempts();
+        if(!hasExceededLoginMax()){
+//            echo "WHAY";
+    ?>
     <table cellspacing="5" cellpadding="10">
         <tr>
             <td>Username</td>
@@ -71,5 +89,26 @@
         </tr>
         
     </table>
+    <?php
+        }  
+        else {
+           
+    ?>
+        <img src="<?php resolveUrl("Images/UI/lock.png"); ?>" width="200"/>
+        
+    <?php
+        }
+    ?>
+    
+</div>
+<div class="errorSummary">
+    <?php
+        if(getLoginAttempts() > 0){
+            $attemptsLeft = $maxLoginAttempts - getLoginAttempts();
+            echo "<span>$attemptsLeft attempts left!</span>";
+        }
+   
+       //echo hasExceededLoginMax();
+    ?>
     
 </div>

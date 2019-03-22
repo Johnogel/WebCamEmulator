@@ -104,7 +104,7 @@
         
         
         
-        self.delta = 15;
+        self.delta = 15 ;
         
         self.zoomDelta = 0.1;
         
