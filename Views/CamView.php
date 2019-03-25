@@ -61,6 +61,8 @@
     function CamViewModel(vW, vH, image){
         var self = this;
         
+        self.timeout = 25;
+        
         image.onload = function(){
             self.initImage();
             self.refreshLens();
@@ -125,25 +127,7 @@
        
        self.lens = function(){
             return self._lens;
-//            var x, y;
-//            
-//            var width = self.imageWidth * (1 - self.scale());
-//            var height = width / self.aspectRatio;
-//            
-//            x = self.currentX() + (self.imageWidth / 2) - (width / 2);
-//            y = self.currentY() + (self.imageHeight / 2) - (height / 2);
-//
-//            var cx = self.viewportWidth / width;
-//            var cy = self.viewportHeight / height;
-//            
-//            return {
-//                x: x,
-//                y: y,
-//                width: width,
-//                height: height,
-//                cx: cx,
-//                cy: cy
-//            };
+
         };
         
         self.maxY = function(){
@@ -172,6 +156,11 @@
         self.zoomDelta = .005;
         
         self.pan = function(xDir, yDir, delta = null){
+            self.movementActive = true;
+            self.recursivePan(xDir, yDir);
+        };
+        
+        self.setPan = function(xDir, yDir, delta = null){
             console.log('pan');
             if(delta == null){
                 delta = self.delta;
@@ -190,16 +179,43 @@
             self.draw();
         };
         
-        self.zoom = function(dir){
-            //self.currentZoom(clamp(self.currentZoom() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
+        self.setZoom = function(dir){
             self.scale(clamp(self.scale() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
             self.refreshLens();
             //self.pan(1, 1, self.zoomDelta * .35);
             self.draw();
         };
         
+        self.recursiveZoom = function(dir){
+            self.setZoom(dir);
+            setTimeout(function(){
+                if(self.movementActive){
+                    self.recursiveZoom(dir);
+                }
+            }, self.timeout);
+        };
         
+        self.recursivePan = function(xDir, yDir, delta = null){
+            self.setPan(xDir, yDir, null);
+            setTimeout(function(){
+                if(self.movementActive){
+                    self.recursivePan(xDir, yDir, delta);
+                }
+            }, self.timeout);
+        };
         
+        self.zoom = function(dir){
+            //self.currentZoom(clamp(self.currentZoom() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
+            self.movementActive = true;
+            //self.setZoom(dir);
+            self.recursiveZoom(dir);
+            
+        };
+        
+        self.movementActive = false;
+        self.cancel = function(){
+            self.movementActive = false;
+        };
         
         //self.canvas = document.getElementById('imgCanvas'); 
         //self.context = self.canvas.getContext('2d'); 
@@ -256,8 +272,14 @@
         var img=  new Image($('.viewport').width(), $('.viewport').height());
         img.src= '<?php getWebCamImageDataUrl() ?>';
 
+        
+
         camViewModel = new CamViewModel($('.viewport').width(), $('.viewport').height(), img);
-        //camViewModel.draw();
+        
+        $('body').mouseup(function(){
+           camViewModel.cancel(); 
+        });
+    //camViewModel.draw();
         ko.applyBindings(camViewModel, $('.viewportWrapper')[0]);
     };
     
@@ -280,11 +302,11 @@
         <table class="centered">
             <tr>
                 <td >
-                    <input type="image" src="Images/UI/zoom-in-button.png" data-bind="click: function(){ zoom(1); }"/>
+                    <input type="image" src="Images/UI/zoom-in-button.png" class="pzControl" data-bind="event: {mousedown : function(){ zoom(1); }}"/>
                 </td>
                 <td class="spaceCell"></td>
                 <td></td>
-                <td><input type="image" src="Images/UI/up-button.png" data-bind="click: function(){ pan(0, -1); }" /></td>
+                <td><input type="image" src="Images/UI/up-button.png" class="pzControl" data-bind="event: {mousedown :  function(){ pan(0, -1); }}" /></td>
                 <td></td>
             </tr>
             <tr>
@@ -292,19 +314,19 @@
                     
                 </td>
                 <td class="spaceCell"></td>
-                <td><input type="image" src="Images/UI/left-button.png" data-bind="click: function(){ pan(-1, 0); }" /></td>
+                <td><input type="image" src="Images/UI/left-button.png" class="pzControl" data-bind="event: {mousedown : function(){ pan(-1, 0); }}" /></td>
                 <td></td>
                 <td>
-                    <input type="image" src="Images/UI/right-button.png" data-bind="click: function(){pan(1, 0);}" />
+                    <input type="image" src="Images/UI/right-button.png" class="pzControl" data-bind="event: {mousedown : function(){pan(1, 0);}}" />
                 </td>
             </tr>
             <tr>
                 <td >
-                    <input type="image" src="Images/UI/zoom-out-button.png" data-bind="click: function(){zoom(-1);}" />
+                    <input type="image" src="Images/UI/zoom-out-button.png" class="pzControl" data-bind="event: {mousedown : function(){zoom(-1);}}" />
                 </td>
                 <td class="spaceCell"></td>
                 <td></td>
-                <td><input type="image" src="Images/UI/down-button.png" data-bind="click: function(){pan(0, 1);}" /></td>
+                <td><input type="image" src="Images/UI/down-button.png" class="pzControl" data-bind="event: {mousedown : function(){pan(0, 1);}}" /></td>
                 <td></td>
             </tr>
                 
