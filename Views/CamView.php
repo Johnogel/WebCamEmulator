@@ -12,7 +12,7 @@
     }
     
     .image{
-        background: url('<?php getWebCamImageDataUrl() ?>') no-repeat center ;
+        background: url('<?php resolveUrl('Images/Webcam/webcamimage.jpg')?>') no-repeat center ;
         width: 100%;
         height:100%;
     }
@@ -42,6 +42,13 @@
         width: 50px;
     }
     
+    .divImage{
+        background: url('<?php getWebCamImageDataUrl() ?>') no-repeat center;
+        
+        width: 100%;
+        height:100%;
+    }
+    
     
 </style>
 
@@ -56,16 +63,17 @@
         
         image.onload = function(){
             self.initImage();
+            self.refreshLens();
             self.draw();
-        }
+        };
         
         self.initImage = function(){
             self.imageWidth = self.image.naturalWidth / .5;
             self.imageHeight = self.image.naturalHeight / .5;
-        }
+        };
         
-        self.minZoom = 2;
-        self.maxZoom = 20;
+        self.minZoom = .35;
+        self.maxZoom = 1;
         
         self.viewportWidth = vW;
         self.viewportHeight = vH;
@@ -74,7 +82,8 @@
 //        self.imageWidth = image.naturalWidth;
 //        self.imageHeight = image.naturalHeight;
         self.aspectRatio = vW / vH;
-        self.currentZoom = ko.observable(7);
+        self.currentZoom = ko.observable(self.viewportWidth * 2);
+        self.scale = ko.observable(.5);
         self.zoomedWidth = ko.computed(
             function(){ 
                 return self.imageWidth * (self.minZoom / self.currentZoom());
@@ -86,69 +95,153 @@
                 return self.zoomedWidth() / self.aspectRatio;
             }, 
         self);
+        
+        self._lens = {
+         
+        };
+        
+        self.refreshLens = function(){
+            var x, y;
+            
+            var width = self.imageWidth * (1 - self.scale());
+            var height = width / self.aspectRatio;
+            
+            x = self.currentX() + (self.imageWidth / 2) - (width /2);
+            y = self.currentY() + (self.imageHeight / 2) - (height /2);
+
+            var cx = self.viewportWidth / width;
+            var cy = self.viewportHeight / height;
+            
+            self._lens = {
+                x: x,
+                y: y,
+                width: width,
+                height: height,
+                cx: cx,
+                cy: cy
+            };
+        };
+        
        
+       self.lens = function(){
+            return self._lens;
+//            var x, y;
+//            
+//            var width = self.imageWidth * (1 - self.scale());
+//            var height = width / self.aspectRatio;
+//            
+//            x = self.currentX() + (self.imageWidth / 2) - (width / 2);
+//            y = self.currentY() + (self.imageHeight / 2) - (height / 2);
+//
+//            var cx = self.viewportWidth / width;
+//            var cy = self.viewportHeight / height;
+//            
+//            return {
+//                x: x,
+//                y: y,
+//                width: width,
+//                height: height,
+//                cx: cx,
+//                cy: cy
+//            };
+        };
         
-        self.maxY = ko.computed(function(){
-            return self.imageWidth - self.zoomedWidth();
-        }, self);
+        self.maxY = function(){
+            var lens = self.lens();
+            
+            var max = self.imageHeight - lens.height /2;
+            
+            return max;
+        };
         
-        self.maxX = ko.computed(function(){
-            return self.imageHeight - self.zoomedHeight();
-        }, self);
-        
+        self.maxX = function(){
+         //            return self.imageWidth - self.zoomedWidth();
+            var lens = self.lens();
+            
+            var max = self.imageWidth - lens.width /2;
+            
+            return max;
+        };
         
         
         self.currentX = ko.observable(0);
         self.currentY = ko.observable(0);
         
-        
-        
-        
         self.delta = 15 ;
         
-        self.zoomDelta = 0.1;
+        self.zoomDelta = .005;
         
-        self.pan = function(xDir, yDir){
-            console.log({xDir, yDir});
-            if(xDir !== 0){
-                self.currentX(clamp(self.currentX() + xDir * self.delta, 0, self.maxX()));
-            }
-            else if(yDir !== 0){
-                self.currentY(clamp(self.currentY() + yDir * self.delta, 0, self.maxY()));
-            }
+        self.pan = function(xDir, yDir, delta = null){
             console.log('pan');
+            if(delta == null){
+                delta = self.delta;
+            }
+            if(xDir !== 0){
+                var bound = self.maxX() - self.imageWidth / 2;
+                self.currentX(clamp(self.currentX() + xDir * delta, -bound, bound));
+            }
+            if(yDir !== 0){
+                var bound = self.maxY() - self.imageHeight / 2;
+
+                self.currentY(clamp(self.currentY() + yDir * delta, -bound, bound));
+            }
+            self.refreshLens();
+
             self.draw();
         };
         
         self.zoom = function(dir){
-            self.currentZoom(clamp(self.currentZoom() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
-            console.log('zoom');
+            //self.currentZoom(clamp(self.currentZoom() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
+            self.scale(clamp(self.scale() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
+            self.refreshLens();
+            //self.pan(1, 1, self.zoomDelta * .35);
             self.draw();
         };
         
-        self.canvas = document.getElementById('imgCanvas'); 
-        self.context = self.canvas.getContext('2d'); 
+        
+        
+        
+        //self.canvas = document.getElementById('imgCanvas'); 
+        //self.context = self.canvas.getContext('2d'); 
         
         self.draw = function(){
             
-//            
-            console.log('test');
+            var img = $('.divImage')[0];
+
+            var pos, x, y;
+            
+            var lens = self.lens();
+            
+            x = lens.x;
+            y = lens.y;
+            /* Prevent the lens from being positioned outside the image: */
+//            if (x > self.imageWidth - lens.width) {x = self.imageWidth - lens.width;}
+//            if (x < 0) {x = 0;}
+//            if (y > self.imageHeight - lens.height) {y = self.imageHeight - lens.height;}
+//            if (y < 0) {y = 0;}
+            /* Set the position of the lens: */
+//            img.style.left = x + "px";
+//            img.style.top = y + "px";
+            /* Display what the lens "sees": */
+            img.style.backgroundPosition =  "-"+(x * lens.cx) + "px -" + (y * lens.cy) + "px";
+            
+            img.style.backgroundSize = (self.imageWidth * lens.cx)+"px "+(self.imageHeight * lens.cy) + "px";
+            
 //            self.context.clearRect(0, 0, self.canvas.width, self.canvas.height);
             
-            self.context.clearRect(0,0, self.canvas.width, self.canvas.height);
-
-
-            self.context.save();
-            self.context.setTransform(1,0,0,1,0,0);
-            
-            
-            var baseScale = (self.maxZoom - self.minZoom) / 2; 
-            
-            var scale = baseScale / self.currentZoom;
-            
-            self.context.scale(scale, scale);
-            self.context.drawImage(self.image, self.currentX(), self.currentY(), self.zoomedWidth(),self.zoomedHeight(), 0,0, self.viewportWidth, self.viewportHeight); 
-            self.context.restore();
+//            self.context.clearRect(0,0, self.canvas.width, self.canvas.height);
+//
+//
+//            self.context.save();
+//            self.context.setTransform(1,0,0,1,0,0);
+//            
+//            
+//            var baseScale = (self.maxZoom - self.minZoom) / 2; 
+//            
+//            
+//            self.context.scale(scale, scale);
+//            self.context.drawImage(self.image, self.currentX(), self.currentY(), self.zoomedWidth(),self.zoomedHeight(), 0,0, self.viewportWidth, self.viewportHeight); 
+//            self.context.restore();
         };
     }
     
@@ -175,9 +268,13 @@
 <!--        <div class="image">
             
         </div>-->
-        <canvas id="imgCanvas">
+<!--        <canvas id="imgCanvas">
             
-        </canvas>
+        </canvas>-->
+        <div class="divImage">
+
+        </div>
+        <!--<img id="imgRoom" src="<?php getWebCamImageDataUrl() ?>" width="300" />-->
     </div>
     <div class="controls">
         <table class="centered">
