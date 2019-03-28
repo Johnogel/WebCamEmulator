@@ -1,5 +1,20 @@
 <?php
-  
+    function authenticated(){
+        return 
+            isset($_SESSION['hash']) 
+            && $_SESSION['hash'] != null 
+            && isset($_SESSION['authenticated']) 
+            && $_SESSION['authenticated'] == true
+            && $_SESSION['ip_address'] == $_SERVER['REMOTE_ADDR'];
+    }
+    
+    function setAsAuthenticated($hash){
+        $_SESSION['hash'] = $hash;
+        $_SESSION['authenticated'] = true;
+        $_SESSION['ip_address'] = $_SERVER['REMOTE_ADDR'];
+        
+    }
+    
     function getWebCamImageDataUrl(){
         $result = null;
         try{
@@ -47,17 +62,9 @@
         
         $time = $_SERVER['REQUEST_TIME'];
 
-        /**
-        * for a 30 minute timeout, specified in seconds
-        */
-
-        /**
-        * Here we look for the user's LAST_ACTIVITY timestamp. If
-        * it's set and indicates our $timeout_duration has passed,
-        * blow away any previous $_SESSION data and start a new one.
-        */
+    
         if (isset($_SESSION['LAST_ACTIVITY']) && 
-           ($time - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+           ($time - $_SESSION['LAST_ACTIVITY']) > $timeout_duration && !authenticated())  {
             session_unset();
             session_destroy();
             session_start();

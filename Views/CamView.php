@@ -1,9 +1,9 @@
 <style>
     .viewport{
-        width: 700px;
+        width: 100%;
         height:500px;
         display: block;
-        padding-top:100px;
+        
     }
     
     .viewport #imgCanvas{
@@ -18,14 +18,16 @@
     }
     
     .viewportWrapper{
+        width: 700px;
         display:block;
         margin: 0 auto;
+        margin-top:100px;
+        border: solid 1px white;
     }
     
     .controls table input{
-        width: 30px;
-        height: 30px;
-
+        width: 25px;
+        height: 25px;
     }
     
     .centered{
@@ -36,10 +38,14 @@
     .controls{
         width: 100%;
         padding-top: 35px;
+        background-color: #36383d;
+        height: 125px;
+        border-top: solid 2px white;
+        
     }
     
     .controls .spaceCell{
-        width: 50px;
+        width: 25px;
     }
     
     .divImage{
@@ -48,6 +54,7 @@
         width: 100%;
         height:100%;
     }
+    
     
     
 </style>
@@ -61,7 +68,7 @@
     function CamViewModel(vW, vH, image){
         var self = this;
         
-        self.timeout = 25;
+        self.timeout = 10;
         
         image.onload = function(){
             self.initImage();
@@ -74,7 +81,7 @@
             self.imageHeight = self.image.naturalHeight / .5;
         };
         
-        self.minZoom = .35;
+        self.minZoom = .5;
         self.maxZoom = 1;
         
         self.viewportWidth = vW;
@@ -108,6 +115,9 @@
             var width = self.imageWidth * (1 - self.scale());
             var height = width / self.aspectRatio;
             
+            var maxWidth = self.imageWidth * (1 - self.minZoom);
+            var maxHeight = maxWidth / self.aspectRatio;
+            
             x = self.currentX() + (self.imageWidth / 2) - (width /2);
             y = self.currentY() + (self.imageHeight / 2) - (height /2);
 
@@ -120,7 +130,9 @@
                 width: width,
                 height: height,
                 cx: cx,
-                cy: cy
+                cy: cy,
+                maxWidth: maxWidth,
+                maxHeight: maxHeight
             };
         };
         
@@ -133,7 +145,7 @@
         self.maxY = function(){
             var lens = self.lens();
             
-            var max = self.imageHeight - lens.height /2;
+            var max = self.imageHeight - lens.maxHeight /2;
             
             return max;
         };
@@ -142,7 +154,7 @@
          //            return self.imageWidth - self.zoomedWidth();
             var lens = self.lens();
             
-            var max = self.imageWidth - lens.width /2;
+            var max = self.imageWidth - lens.maxWidth /2;
             
             return max;
         };
@@ -151,7 +163,7 @@
         self.currentX = ko.observable(0);
         self.currentY = ko.observable(0);
         
-        self.delta = 15 ;
+        self.delta = 20 ;
         
         self.zoomDelta = .005;
         

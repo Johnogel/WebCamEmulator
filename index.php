@@ -12,14 +12,7 @@
         echo $rootPath . '/'. $path;
     }
     
-    function authenticated(){
-        return isset($_SESSION['hash']) && $_SESSION['hash'] != null && isset($_SESSION['authenticated']) && $_SESSION['authenticated'] == true;
-    }
     
-    function setAsAuthenticated($hash){
-        $_SESSION['hash'] = $hash;
-        $_SESSION['authenticated'] = true;
-    }
     
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         

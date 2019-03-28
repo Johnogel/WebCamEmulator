@@ -49,6 +49,10 @@
             align-items: center;
         }
         
+        .header .outer{
+            width: 70px;
+        }
+        
         .body{
             width:100%;
         }
@@ -73,9 +77,9 @@
         <div class="header">
             <div class="flexWrapper">
                 
-                <div></div>
+                <div class="outer" ></div>
                 <div><h3>LOGO PLACEHOLDER</h3></div>
-                <div style="padding-right">
+                <div class="outer">
                     <?php if(authenticated()) { ?>
                         <button onclick="logout()">Log Out</button>
                     <?php } ?>
