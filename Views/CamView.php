@@ -49,7 +49,7 @@
     }
     
     .divImage{
-        background: url('<?php getWebCamImageDataUrl() ?>') no-repeat center;
+        //background: url('<?php getWebCamImageDataUrl() ?>') no-repeat center;
         
         width: 100%;
         height:100%;
@@ -68,7 +68,7 @@
     function CamViewModel(vW, vH, image){
         var self = this;
         
-        self.timeout = 10;
+        self.timeout = 15;
         
         image.onload = function(){
             self.initImage();
@@ -79,6 +79,7 @@
         self.initImage = function(){
             self.imageWidth = self.image.naturalWidth / .5;
             self.imageHeight = self.image.naturalHeight / .5;
+            $('.divImage').css('background-image', 'url(\''+$(self.image).prop('src') + '\')');
         };
         
         self.minZoom = .5;
@@ -87,7 +88,7 @@
         self.viewportWidth = vW;
         self.viewportHeight = vH;
         self.image = image;
-        self.initImage();
+        //self.initImage();
 //        self.imageWidth = image.naturalWidth;
 //        self.imageHeight = image.naturalHeight;
         self.aspectRatio = vW / vH;

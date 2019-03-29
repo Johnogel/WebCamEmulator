@@ -19,7 +19,7 @@
     .errorSummary{
         width: 100%;
         text-align: center;
-        color: indianred;
+        color: red;
         padding-top: 20px;
     }
 </style>
@@ -95,6 +95,8 @@
            
     ?>
         <img src="<?php resolveUrl("Images/UI/lock.png"); ?>" width="200"/>
+        <br/>
+        <p style="color:red">Max attempts exceeded. You will be locked out for <?php echo ConfigManager::Value('LockoutExpirationTimeSeconds') / 60 ?> minutes.</p>
         
     <?php
         }
@@ -103,9 +105,10 @@
 </div>
 <div class="errorSummary">
     <?php
-        if(getLoginAttempts() > 0){
-            $attemptsLeft = $maxLoginAttempts - getLoginAttempts();
-            echo "<span>$attemptsLeft attempts left!</span>";
+        $attemptsLeft = getMaxLoginAttempts() - getLoginAttempts();
+        if($attemptsLeft > 0 && $attemptsLeft != getMaxLoginAttempts()){
+            
+            echo "<span>WARNING: $attemptsLeft attempts remaining.</span>";
         }
    
        //echo hasExceededLoginMax();
