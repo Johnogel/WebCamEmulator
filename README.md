@@ -20,9 +20,9 @@ Here's an example of what you will see in the console when executing the script 
 
 `Username (Enter nothing to exit):Test`
 
-`Password: `
+`Password:`
 
-`Password (Confirm): true`
+`Password (Confirm):`
 
 `Username (Enter nothing to exit):`
 
