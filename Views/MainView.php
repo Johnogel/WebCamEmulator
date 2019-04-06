@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Monitor My Stuff</title>
-  <meta name="description" content="Test">
+  <title>Security Camera</title>
+  <meta name="description" content="Security PTZ Camera">
   <meta name="author" content="jbelaire">
   <script src="<?php resolveUrl('Scripts/jquery-3.1.1.min.js')?>"></script>
   <script src="<?php resolveUrl('Scripts/knockout-3.5.0.js')?>"></script>
@@ -33,10 +33,9 @@
         
         .main .header{
             background-color: #36383d;
-            box-shadow: 0px 3px 10px 3px #202123;
+            box-shadow: 0px 1px 4px 1px #202123;
             width: 100%;
-            height: 70px;
-            
+            height: 130px;
         }
         
         .header .flexWrapper{
@@ -78,7 +77,7 @@
             <div class="flexWrapper">
                 
                 <div class="outer" ></div>
-                <div><h3>LOGO PLACEHOLDER</h3></div>
+                <div><img src="Images/logo.jpg" /></div>
                 <div class="outer">
                     <?php if(authenticated()) { ?>
                         <button onclick="logout()">Log Out</button>

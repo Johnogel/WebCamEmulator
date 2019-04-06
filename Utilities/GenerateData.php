@@ -2,16 +2,14 @@
 
 
     $clear = false;
-    if(isset($argc) && isset($argv) && $argv > 2){
-        if($argv > 3){
-//            var_dump($argv);
+    if(isset($argc) && isset($argv) && $argc > 2){
+        if($argc > 3){
             $clear = ($argv[3] == 'clear');
-            
-            
         }
         $username = $argv[1];
         $password = $argv[2];
     }
+    
     
     $hash = password_hash($password, PASSWORD_DEFAULT);
     
@@ -39,16 +37,6 @@
     
     file_put_contents($dataPath, json_encode($fileContents));
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     
 
 ?>

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BASEDIR=$(dirname "$0")
+
 promptForInfo(){
     printf  "\nUsername (Enter nothing to exit):"
     read  username ;
@@ -19,11 +21,11 @@ promptForInfo(){
 
         if [ $password1 = $password2 ] 
         then
-            if [ -n $1 ]
+            if [[ -n $1 ]]
             then
-                php GenerateData.php $username $password1 "clear" 
+                php "$BASEDIR/GenerateData.php" $username $password1 "clear" 
             else 
-                php GenerateData.php $username $password1
+                php "$BASEDIR/GenerateData.php" $username $password1
             fi
 
             echo true && break;

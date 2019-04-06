@@ -18,7 +18,7 @@
     }
     
     .viewportWrapper{
-        width: 700px;
+        width: 800px;
         display:block;
         margin: 0 auto;
         margin-top:100px;
@@ -49,8 +49,6 @@
     }
     
     .divImage{
-        //background: url('<?php getWebCamImageDataUrl() ?>') no-repeat center;
-        
         width: 100%;
         height:100%;
     }
@@ -82,8 +80,8 @@
             $('.divImage').css('background-image', 'url(\''+$(self.image).prop('src') + '\')');
         };
         
-        self.minZoom = .5;
-        self.maxZoom = 1;
+        self.minZoom = .65;
+        self.maxZoom = .90;
         
         self.viewportWidth = vW;
         self.viewportHeight = vH;
@@ -93,7 +91,7 @@
 //        self.imageHeight = image.naturalHeight;
         self.aspectRatio = vW / vH;
         self.currentZoom = ko.observable(self.viewportWidth * 2);
-        self.scale = ko.observable(.5);
+        self.scale = ko.observable(.7);
         self.zoomedWidth = ko.computed(
             function(){ 
                 return self.imageWidth * (self.minZoom / self.currentZoom());
@@ -281,7 +279,7 @@
 
     var camViewModel;
 
-    window.onload = function () {
+    $('body')[0].onload = function () {
         var img=  new Image($('.viewport').width(), $('.viewport').height());
         img.src= '<?php getWebCamImageDataUrl() ?>';
 
