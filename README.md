@@ -16,13 +16,13 @@ The existing file should have one entry with the following info:
 
 Here's an example of what you will see in the console when executing the script (including input):
 
-```Do you wish to clear data (y/n)y
+`Do you wish to clear data (y/n)y
 Username (Enter nothing to exit):Test
 
 Password: 
 Password (Confirm): true
 
-Username (Enter nothing to exit):```
+Username (Enter nothing to exit):`
 
 password is hidden as usual. 
 
