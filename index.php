@@ -1,15 +1,10 @@
 <?php
-    $rootPath = getenv('APP_ROOT_PATH');
+    
     
     require_once 'Utilities/functions.php';
     
     sessionRefresh();
     
-    function resolveUrl($path){
-        global $rootPath;
-                
-        echo $rootPath . '/'. $path;
-    }
     
     
     

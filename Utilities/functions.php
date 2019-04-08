@@ -1,6 +1,14 @@
 <?php
     require_once 'ConfigManager.php';
     
+    $rootPath = getenv('APP_ROOT_PATH');
+    
+    function resolveUrl($path){
+        global $rootPath;
+        echo $rootPath . '/'. $path;
+    }
+    
+    
     function authenticated(){
         return 
             isset($_SESSION['hash']) 

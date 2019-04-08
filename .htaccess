@@ -1,6 +1,6 @@
-SetEnv APP_ROOT_PATH /CamProject
+#SetEnv APP_ROOT_PATH /
 RewriteEngine On
-RewriteBase /CamProject/
+RewriteBase /
 RewriteCond %{REQUEST_URI} !^/index.php$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

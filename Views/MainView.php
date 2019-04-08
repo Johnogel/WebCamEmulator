@@ -77,7 +77,7 @@
             <div class="flexWrapper">
                 
                 <div class="outer" ></div>
-                <div><img src="Images/logo.jpg" /></div>
+                <div><img src="<?php resolveUrl('Images/logo.jpg')?>" /></div>
                 <div class="outer">
                     <?php if(authenticated()) { ?>
                         <button onclick="logout()">Log Out</button>
