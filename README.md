@@ -12,7 +12,7 @@ ex:
 If your document root is `var/www/`  
 and your site directory is `var/www/CamProject`  
 
-Then modify the following lines in the *.htaccess*:
+Then modify the following lines in the *.htaccess*:  
 `#SetEnv APP_ROOT_PATH /`  
 `RewriteEngine On`  
 `RewriteBase /`  
