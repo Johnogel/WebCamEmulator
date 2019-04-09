@@ -3,6 +3,7 @@
         width: 100%;
         height:500px;
         display: block;
+        position:relative;
         
     }
     
@@ -26,8 +27,10 @@
     }
     
     .controls table input{
-        width: 25px;
-        height: 25px;
+        width: 25px !important;
+        height: 25px !important;
+        min-width: 25px !important;
+        min-height: 25px !important;
     }
     
     .centered{
@@ -51,6 +54,15 @@
     .divImage{
         width: 100%;
         height:100%;
+    }
+    
+    .staticOverlay{
+        background: url('<?php resolveUrl('Images/Webcam/static.gif')?>') repeat center;
+        background-size: 2000px 10px;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
     }
     
     
@@ -218,7 +230,7 @@
         self.zoom = function(dir){
             //self.currentZoom(clamp(self.currentZoom() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
             self.movementActive = true;
-            //self.setZoom(dir);
+
             self.recursiveZoom(dir);
             
         };
@@ -227,9 +239,7 @@
         self.cancel = function(){
             self.movementActive = false;
         };
-        
-        //self.canvas = document.getElementById('imgCanvas'); 
-        //self.context = self.canvas.getContext('2d'); 
+
         
         self.draw = function(){
             
@@ -241,34 +251,11 @@
             
             x = lens.x;
             y = lens.y;
-            /* Prevent the lens from being positioned outside the image: */
-//            if (x > self.imageWidth - lens.width) {x = self.imageWidth - lens.width;}
-//            if (x < 0) {x = 0;}
-//            if (y > self.imageHeight - lens.height) {y = self.imageHeight - lens.height;}
-//            if (y < 0) {y = 0;}
-            /* Set the position of the lens: */
-//            img.style.left = x + "px";
-//            img.style.top = y + "px";
-            /* Display what the lens "sees": */
+
             img.style.backgroundPosition =  "-"+(x * lens.cx) + "px -" + (y * lens.cy) + "px";
             
             img.style.backgroundSize = (self.imageWidth * lens.cx)+"px "+(self.imageHeight * lens.cy) + "px";
-            
-//            self.context.clearRect(0, 0, self.canvas.width, self.canvas.height);
-            
-//            self.context.clearRect(0,0, self.canvas.width, self.canvas.height);
-//
-//
-//            self.context.save();
-//            self.context.setTransform(1,0,0,1,0,0);
-//            
-//            
-//            var baseScale = (self.maxZoom - self.minZoom) / 2; 
-//            
-//            
-//            self.context.scale(scale, scale);
-//            self.context.drawImage(self.image, self.currentX(), self.currentY(), self.zoomedWidth(),self.zoomedHeight(), 0,0, self.viewportWidth, self.viewportHeight); 
-//            self.context.restore();
+
         };
     }
     
@@ -292,22 +279,19 @@
         });
     //camViewModel.draw();
         ko.applyBindings(camViewModel, $('.viewportWrapper')[0]);
+        
+
     };
     
 </script>
 
 <div class="viewportWrapper">
     <div class="viewport centered">
-<!--        <div class="image">
-            
-        </div>-->
-<!--        <canvas id="imgCanvas">
-            
-        </canvas>-->
+        <div class='staticOverlay'></div>
         <div class="divImage">
 
         </div>
-        <!--<img id="imgRoom" src="<?php getWebCamImageDataUrl() ?>" width="300" />-->
+
     </div>
     <div class="controls">
         <table class="centered">
