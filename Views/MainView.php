@@ -100,6 +100,7 @@
         
         .main {
             width: 100vw;
+            min-height: 95vh;
         }
         
         .main .header{
@@ -125,6 +126,22 @@
         
         .body{
             width:100%;
+            
+        }
+        
+        .footer{
+            width: 100%;
+            text-align: right;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            position: fixed;
+            bottom:0;
+            background-color: #36383d;
+            box-shadow: 0px -1px 5px 1px #202123;
+        }
+        
+        .footer span{
+            margin-right: 25px;
         }
     </style>
     <script src="<?php resolveUrl('Scripts/main.js')?>"></script>
@@ -159,7 +176,7 @@
         
             </div>
         </div>
-            <div class="body">
+        <div class="body">
 
             <?php
 
@@ -171,8 +188,11 @@
               }
             ?>
         </div>
+        
     </div>
-
+    <div class="footer">
+        <span class="copyright">© Janet Robot Security</span>
+    </div>
 
 </body>
 </html>

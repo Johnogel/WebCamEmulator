@@ -1,3 +1,5 @@
+Options -Indexes
+
 #SetEnv APP_ROOT_PATH /
 RewriteEngine On
 RewriteBase /
@@ -5,4 +7,5 @@ RewriteCond %{REQUEST_URI} !^/index.php$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !\.(css|gif|ico|jpg|js|png|swf|txt|svg|woff|ttf|eot)$
-RewriteRule ^(.*)$ index.php [L,QSA]
+
+RewriteRule ^(.*)$ index.php [L,QSA] 

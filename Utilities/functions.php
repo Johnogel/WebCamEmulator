@@ -49,8 +49,6 @@
         $maxLoginAttempts = getMaxLoginAttempts();
         $attempts = getLoginAttempts();
         return $attempts >= $maxLoginAttempts;
-        
-        //return ($attempts >= $maxLoginAttempts);
     }
     
     function getMaxLoginAttempts(){
@@ -66,13 +64,7 @@
     
     function sessionRefresh(){
         $timeout_duration = ConfigManager::Value("LockoutExpirationTimeSeconds");
-        
-//
-//        session_start([
-//            'cookie_lifetime' => $timeout_duration,
-//            'gc_maxlifetime' =>$timeout_duration
-//        ]);
-        
+
         session_start();
         
         
@@ -87,10 +79,6 @@
             session_start();
         }
 
-        /**
-        * Finally, update LAST_ACTIVITY so that our timeout
-        * is based on it and not the user's login time.
-        */
         $_SESSION['LAST_ACTIVITY'] = $time;
     }
 

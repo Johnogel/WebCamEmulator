@@ -52,9 +52,7 @@
     $(document).ready(function(){
         $('#btnEnter').on('keyup', function(e){
             if (e.keyCode === 13) {
-                // Cancel the default action, if needed
                 e.preventDefault();
-                // Trigger the button element with a click
                 $(this).click();
             }
         });
@@ -73,7 +71,6 @@
     <?php 
         $loginAttemps = getLoginAttempts();
         if(!hasExceededLoginMax()){
-//            echo "WHAY";
     ?>
     <table cellspacing="5" cellpadding="10">
         <tr>
@@ -110,8 +107,6 @@
             
             echo "<span>WARNING: $attemptsLeft attempts remaining.</span>";
         }
-   
-       //echo hasExceededLoginMax();
     ?>
     
 </div>

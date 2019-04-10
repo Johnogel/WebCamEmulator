@@ -10,12 +10,10 @@
             $index = array_search($username, array_column($fileArray, 'username'));
 
             $person = null;
-            //if($index){
             if(is_numeric($index)){
                 $person = $fileArray[$index];
 
             }
-            //}
 
             return $person;
         }

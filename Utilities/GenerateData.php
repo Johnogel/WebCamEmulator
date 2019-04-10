@@ -1,6 +1,5 @@
 <?php
 
-
     $clear = false;
     if(isset($argc) && isset($argv) && $argc > 2){
         if($argc > 3){

@@ -1,7 +1,6 @@
 <?php
     foreach (glob(__DIR__ . "/*.php") as $filename) {
         require_once $filename;
-//        echo $filename;
     }
 
     function callPostFunction($func){
@@ -34,9 +33,6 @@
                     echo $pathArray[i];
                 }
             }
-            else{
-//                echo $i;
-            }
         }
         
         if (!$success){
@@ -47,21 +43,12 @@
     function routeRequest($path, $queryString){
         global $rootPath;
         $path = str_replace($rootPath, "", $path);
-        //$path 
-        
-//        echo $path;
         
         $pathArray = explode('/',$path);
-        
-//        var_dump($pathArray);
         
         if(count($pathArray) > 0){
             routeArray($pathArray);
         }
-        else{
-//            echo 'ERRROROROR';
-        }
-        
     }
 
 ?>

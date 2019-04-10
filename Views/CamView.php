@@ -1,9 +1,10 @@
 <style>
     .viewport{
         width: 100%;
-        height:500px;
+        height:425px;
         display: block;
         position:relative;
+        border: solid 1px white;
         
     }
     
@@ -19,11 +20,12 @@
     }
     
     .viewportWrapper{
-        width: 800px;
+        width: 700px;
         display:block;
         margin: 0 auto;
         margin-top:60px;
-        border: solid 1px white;
+        padding-bottom: 50px;
+
     }
     
     .controls table input{
@@ -57,12 +59,17 @@
     }
     
     .staticOverlay{
-        background: url('<?php resolveUrl('Images/Webcam/static.gif')?>') repeat center;
+        background: url('<?php resolveUrl('Images/static.gif')?>') repeat center;
         background-size: 2000px 10px;
         position: absolute;
         width: 100%;
         height: 100%;
         z-index: 100;
+    }
+    
+    .controls{
+        border: solid 1px white;
+
     }
     
     
@@ -98,9 +105,6 @@
         self.viewportWidth = vW;
         self.viewportHeight = vH;
         self.image = image;
-        //self.initImage();
-//        self.imageWidth = image.naturalWidth;
-//        self.imageHeight = image.naturalHeight;
         self.aspectRatio = vW / vH;
         self.currentZoom = ko.observable(self.viewportWidth * 2);
         self.scale = ko.observable(.7);
@@ -162,9 +166,7 @@
         };
         
         self.maxX = function(){
-         //            return self.imageWidth - self.zoomedWidth();
             var lens = self.lens();
-            
             var max = self.imageWidth - lens.maxWidth /2;
             
             return max;
@@ -205,7 +207,6 @@
         self.setZoom = function(dir){
             self.scale(clamp(self.scale() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
             self.refreshLens();
-            //self.pan(1, 1, self.zoomDelta * .35);
             self.draw();
         };
         
@@ -228,11 +229,8 @@
         };
         
         self.zoom = function(dir){
-            //self.currentZoom(clamp(self.currentZoom() + dir * self.zoomDelta, self.minZoom, self.maxZoom));
             self.movementActive = true;
-
             self.recursiveZoom(dir);
-            
         };
         
         self.movementActive = false;
@@ -244,18 +242,13 @@
         self.draw = function(){
             
             var img = $('.divImage')[0];
-
-            var pos, x, y;
-            
+            var x, y;
             var lens = self.lens();
             
             x = lens.x;
             y = lens.y;
-
             img.style.backgroundPosition =  "-"+(x * lens.cx) + "px -" + (y * lens.cy) + "px";
-            
             img.style.backgroundSize = (self.imageWidth * lens.cx)+"px "+(self.imageHeight * lens.cy) + "px";
-
         };
     }
     
@@ -270,17 +263,12 @@
         var img=  new Image($('.viewport').width(), $('.viewport').height());
         img.src= '<?php getWebCamImageDataUrl() ?>';
 
-        
-
         camViewModel = new CamViewModel($('.viewport').width(), $('.viewport').height(), img);
         
         $('body').mouseup(function(){
            camViewModel.cancel(); 
         });
-    //camViewModel.draw();
         ko.applyBindings(camViewModel, $('.viewportWrapper')[0]);
-        
-
     };
     
 </script>
@@ -297,11 +285,11 @@
         <table class="centered">
             <tr>
                 <td >
-                    <input type="image" src="Images/UI/zoom-in-button.png" class="pzControl" data-bind="event: {mousedown : function(){ zoom(1); }}"/>
+                    <input type="image" src="<?php resolveUrl('Images/UI/zoom-in-button.png')?>" class="pzControl" data-bind="event: {mousedown : function(){ zoom(1); }}"/>
                 </td>
                 <td class="spaceCell"></td>
                 <td></td>
-                <td><input type="image" src="Images/UI/up-button.png" class="pzControl" data-bind="event: {mousedown :  function(){ pan(0, -1); }}" /></td>
+                <td><input type="image" src="<?php resolveUrl('Images/UI/up-button.png')?>" class="pzControl" data-bind="event: {mousedown :  function(){ pan(0, -1); }}" /></td>
                 <td></td>
             </tr>
             <tr>
@@ -309,19 +297,19 @@
                     
                 </td>
                 <td class="spaceCell"></td>
-                <td><input type="image" src="Images/UI/left-button.png" class="pzControl" data-bind="event: {mousedown : function(){ pan(-1, 0); }}" /></td>
+                <td><input type="image" src="<?php resolveUrl('Images/UI/left-button.png')?>" class="pzControl" data-bind="event: {mousedown : function(){ pan(-1, 0); }}" /></td>
                 <td></td>
                 <td>
-                    <input type="image" src="Images/UI/right-button.png" class="pzControl" data-bind="event: {mousedown : function(){pan(1, 0);}}" />
+                    <input type="image" src="<?php resolveUrl('Images/UI/right-button.png')?>" class="pzControl" data-bind="event: {mousedown : function(){pan(1, 0);}}" />
                 </td>
             </tr>
             <tr>
                 <td >
-                    <input type="image" src="Images/UI/zoom-out-button.png" class="pzControl" data-bind="event: {mousedown : function(){zoom(-1);}}" />
+                    <input type="image" src="<?php resolveUrl('Images/UI/zoom-out-button.png')?>" class="pzControl" data-bind="event: {mousedown : function(){zoom(-1);}}" />
                 </td>
                 <td class="spaceCell"></td>
                 <td></td>
-                <td><input type="image" src="Images/UI/down-button.png" class="pzControl" data-bind="event: {mousedown : function(){pan(0, 1);}}" /></td>
+                <td><input type="image" src="<?php resolveUrl('Images/UI/down-button.png')?>" class="pzControl" data-bind="event: {mousedown : function(){pan(0, 1);}}" /></td>
                 <td></td>
             </tr>
                 
