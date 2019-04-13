@@ -1,5 +1,5 @@
 {
-    "MaxAttempts": 2,
+    "MaxAttempts": 5,
     "LockoutExpirationTimeSeconds" : 900,
     "InactiveSessionExpirationSeconds" : 0 
 }

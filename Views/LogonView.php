@@ -104,8 +104,8 @@
     <?php
         $attemptsLeft = getMaxLoginAttempts() - getLoginAttempts();
         if($attemptsLeft > 0 && $attemptsLeft != getMaxLoginAttempts()){
-            
-            echo "<span>WARNING: $attemptsLeft attempts remaining.</span>";
+            $s = $attemptsLeft > 1 ? "s" : "";
+            echo "<span>WARNING: $attemptsLeft attempt$s remaining.</span>";
         }
     ?>
     
