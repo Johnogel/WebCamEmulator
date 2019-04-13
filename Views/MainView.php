@@ -138,6 +138,7 @@
             bottom:0;
             background-color: #36383d;
             box-shadow: 0px -1px 5px 1px #202123;
+	    z-index:3000;
         }
         
         .footer span{
