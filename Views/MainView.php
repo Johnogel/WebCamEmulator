@@ -191,7 +191,7 @@
         
     </div>
     <div class="footer">
-        <span class="copyright">© Janet Robot Security</span>
+        <span class="copyright">© Janky Robot Security</span>
     </div>
 
 </body>
